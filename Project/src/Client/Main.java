@@ -47,9 +47,9 @@ public class Main {
         frame.setVisible(true);
     }
 
-    public void goToEmailClient(String host, int port, String address) throws IOException {
+    public void goToEmailClient(String host, int SMTPport, int IMAPport, String address) throws IOException {
         //create panels
-        EmailClient client = new EmailClient(host, port, address);;
+        EmailClient client = new EmailClient(host, SMTPport, IMAPport, address);;
         Component clientPanel = client.getPanel();
 
         //remove previous cards

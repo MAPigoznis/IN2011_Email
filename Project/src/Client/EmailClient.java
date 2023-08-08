@@ -5,19 +5,22 @@ import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
 public class EmailClient {
-    private Socket socket;
+    private Socket SMTPsocket;
+    private Socket IMAPsocket;
+
     private JTable emailTable;
     private JButton writeButton;
     private JButton logOutButton;
     private JPanel clientPanel;
+    private JButton refreshButton;
 
-    public EmailClient(String host, int port, String address) throws IOException {
-        socket = new Socket(host, port);
+    public EmailClient(String host, int SMTPport, int IMAPport, String address) throws IOException {
+        SMTPsocket = new Socket(host, SMTPport);
+        IMAPsocket = new Socket(host, IMAPport);
 
         writeButton.addActionListener(e -> openNewPage("write", address));
 
@@ -31,6 +34,12 @@ public class EmailClient {
             if (!event.getValueIsAdjusting()) {
                 //opens message
                 openNewPage("read", address);
+            }
+        });
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO receive emails
             }
         });
     }
@@ -64,13 +73,16 @@ public class EmailClient {
     }
 
     public void sendEmail(int MessageID, String from, String to, String subject, String body) throws IOException {
-        try (OutputStream os = socket.getOutputStream()) {
+        try (OutputStream os = SMTPsocket.getOutputStream()) {
             os.write(("id" + MessageID + from + "\n" + to + "\n" + subject + "\n" + body).getBytes());
         }
     }
 
     public String receiveEmail() throws IOException {
         //FIXME receiving emails does not work
+        try (OutputStream os = IMAPsocket.getOutputStream()) {
+            os.write(("").getBytes());
+        }
         /*try (InputStream is = socket.getInputStream()) {
             byte[] buffer = new byte[1024];
             System.out.println("2");
@@ -81,7 +93,7 @@ public class EmailClient {
     }
 
     public void close() throws IOException {
-        socket.close();
+        SMTPsocket.close();
     }
     //getters, setters
     public JPanel getPanel() {

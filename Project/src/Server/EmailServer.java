@@ -5,25 +5,31 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class EmailServer {
-    private ServerSocket serverSocket;
+    private ServerSocket SMTPport;
+    private ServerSocket IMAPport;
     private boolean isRunning;
 
-    public EmailServer(int port) throws IOException {
-        serverSocket = new ServerSocket(port);
+    public EmailServer(int SMTPport, int IMAPport) throws IOException {
+        this.SMTPport = new ServerSocket(SMTPport);
+        this.IMAPport = new ServerSocket(IMAPport);
         isRunning = true;
     }
 
     public void start() {
-        System.out.println("Server started. Listening on port " + serverSocket.getLocalPort());
+        System.out.println("Server started. Listening SMTP on port " + SMTPport.getLocalPort()
+                + ", listening IMAP on port " + IMAPport.getLocalPort());
         while (isRunning) {
             try {
                 System.out.println("Server waiting for client...");
-                Socket clientSocket = serverSocket.accept();
+                Socket SMTPclientSocket = SMTPport.accept();
+                Socket IMAPclientSocket = IMAPport.accept();
                 System.out.println("Client connected!");
 
-                //create a new client thread
-                ClientThread clientThread = new ClientThread(clientSocket);
-                clientThread.start();
+                //create new client threads
+                SMTPClientThread SMTPclientThread = new SMTPClientThread(SMTPclientSocket);
+                IMAPClientThread IMAPclientThread = new IMAPClientThread(IMAPclientSocket);
+                SMTPclientThread.start();
+                IMAPclientThread.start();
 
             } catch (IOException e) {
                 if (isRunning) {
@@ -36,7 +42,8 @@ public class EmailServer {
     public void stop() {
         try {
             isRunning = false;
-            serverSocket.close();
+            SMTPport.close();
+            IMAPport.close();
             System.out.println("Server stopped.");
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,9 +51,10 @@ public class EmailServer {
     }
 
     public static void main(String[] args) {
-        int port = 8080;
+        int SMTPport = 8080;
+        int IMAPport = 8081;
         try {
-            EmailServer server = new EmailServer(port);
+            EmailServer server = new EmailServer(SMTPport, IMAPport);
             server.start();
         } catch (IOException e) {
             e.printStackTrace();

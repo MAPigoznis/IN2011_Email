@@ -7,11 +7,11 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.Socket;
 
-public class ClientThread extends Thread {
+public class SMTPClientThread extends Thread {
 
     private Socket clientSocket;
 
-    public ClientThread(Socket clientSocket) {
+    public SMTPClientThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
 
@@ -24,10 +24,24 @@ public class ClientThread extends Thread {
             String msg;
             while (true) {
                 msg = reader.readLine();
-                if (msg == null) {
-                    writer.write("i die");
+                if (msg.startsWith("HALO")) {
+                    //client connected
+                    writer.write("OK");
+                } else if (msg.startsWith("MAIL")){
+                    //from
+                    writer.write("");
+                } else if (msg.startsWith("RCPT")){
+                    //to
+                    writer.write("");
+                } else if (msg.startsWith("DATA")){
+                    //email text
+                    writer.write("");
+                } else if (msg.startsWith("QUIT")){
+                    //quit thread
+                    writer.write("Connection closed.");
                     break;
                 }
+
                 System.out.println("Client says: " + msg);
             }
         } catch (IOException e) {

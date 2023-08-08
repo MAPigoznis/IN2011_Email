@@ -18,7 +18,7 @@ public class ClientLogin {
                 if(checkUser()) {
                     //user credentials correct, tell Main what client to open
                     try {
-                        main.goToEmailClient("localhost", 8080, "example@address.com");
+                        main.goToEmailClient("localhost", 8080, 8081, "example@address.com");
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
@@ -34,7 +34,7 @@ public class ClientLogin {
         String user = textField.getText();
         String password = passwordField.getText();
 
-        //TODO implement authentification check
+        //TODO implement authentication check
         return true;
     }
 
