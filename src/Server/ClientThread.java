@@ -1,3 +1,5 @@
+package Server;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,13 +25,11 @@ public class ClientThread extends Thread {
             while (true) {
                 msg = reader.readLine();
                 if (msg == null) {
+                    writer.write("i die");
                     break;
                 }
                 System.out.println("Client says: " + msg);
             }
-
-            //close down the connection
-            clientSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
