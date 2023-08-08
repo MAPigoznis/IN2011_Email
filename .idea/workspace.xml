@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
     <list default="true" id="ad4868cf-efad-428e-9512-98975bedc83a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/Project/.gitattributes" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Project/.idea/.gitignore" beforeDir="false" />
@@ -24,6 +25,9 @@
       <change beforePath="$PROJECT_DIR$/Project/src/EmailContent/Header.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Project/src/EmailServer.java" beforeDir="false" />
     </list>
+=======
+    <list default="true" id="ad4868cf-efad-428e-9512-98975bedc83a" name="Changes" comment="" />
+>>>>>>> Stashed changes
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -62,7 +66,11 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+<<<<<<< Updated upstream
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
+=======
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Project" />
+>>>>>>> Stashed changes
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -135,12 +143,30 @@
       <workItem from="1691446511016" duration="50000" />
       <workItem from="1691446573083" duration="92000" />
       <workItem from="1691446767681" duration="6000" />
+<<<<<<< Updated upstream
+=======
+      <workItem from="1691486712109" duration="323000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+<<<<<<< Updated upstream
+=======
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+>>>>>>> Stashed changes
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
