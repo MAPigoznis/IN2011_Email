@@ -14,6 +14,7 @@ public class EmailClient {
     private JTable emailTable;
     private JButton writeButton;
     private JButton logOutButton;
+    private JPanel clientPanel;
 
     public EmailClient(String host, int port, String address) throws IOException {
         socket = new Socket(host, port);
@@ -35,7 +36,7 @@ public class EmailClient {
     }
 
     //open pages read or write
-    private void openNewPage(String page, String address) {
+    public void openNewPage(String page, String address) {
         JFrame newPage = null;
 
         switch (page) {
@@ -69,6 +70,7 @@ public class EmailClient {
     }
 
     public String receiveEmail() throws IOException {
+        //FIXME receiving emails does not work
         /*try (InputStream is = socket.getInputStream()) {
             byte[] buffer = new byte[1024];
             System.out.println("2");
@@ -81,13 +83,17 @@ public class EmailClient {
     public void close() throws IOException {
         socket.close();
     }
+    //getters, setters
+    public JPanel getPanel() {
+        return clientPanel;
+    }
 
-    public static void main(String[] args) throws IOException {
+
+    /*public static void main(String[] args) throws IOException {
+        //send an email
         String host = "localhost";
         int port = 8080;
         EmailClient client = new EmailClient(host, port, "from@example.com");
-
-        //send an email
         //TODO set up ID system
         client.sendEmail(0,"from@example.com", "to@example.com", "Subject", "This is the body of the email.");
 
@@ -96,5 +102,5 @@ public class EmailClient {
         System.out.println(email);
 
         client.close();
-    }
+    }*/
 }

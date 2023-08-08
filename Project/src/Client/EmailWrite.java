@@ -14,7 +14,7 @@ public class EmailWrite extends JFrame {
 
     public EmailWrite(String address) {
         //set up window
-        setTitle("Read Email");
+        setTitle("Write Email");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(300, 200);
         setLocationRelativeTo(null); //center
