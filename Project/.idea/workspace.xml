@@ -1,71 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9e658a6a-2a96-4ccd-a186-a3e89ec86439" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Client/ClientLogin.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/ClientLogin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/EmailClient.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/EmailClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/EmailRead.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/EmailRead.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/EmailWrite.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/EmailWrite.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/IN2011_Email.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/ClientThread.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Server/EmailServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/Client/ClientLogin.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/Client/EmailClient.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/Client/EmailRead.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/Client/EmailWrite$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/Client/EmailWrite.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/IN2011_Email.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/Server/ClientThread.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/Server/EmailServer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/com/intellij/uiDesigner/core/AbstractLayout.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/com/intellij/uiDesigner/core/DimensionInfo.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/com/intellij/uiDesigner/core/GridConstraints.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/com/intellij/uiDesigner/core/GridLayoutManager.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/com/intellij/uiDesigner/core/HorizontalInfo.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/com/intellij/uiDesigner/core/LayoutState.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/com/intellij/uiDesigner/core/Spacer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/com/intellij/uiDesigner/core/SupportCode$TextWithMnemonic.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/com/intellij/uiDesigner/core/SupportCode.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/com/intellij/uiDesigner/core/Util.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/IN2011_Email/com/intellij/uiDesigner/core/VerticalInfo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/.idea/libraries/Java_EE_6_Java_EE_6.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/IN2011_Email.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/lib/javax.annotation.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/lib/javax.ejb.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/lib/javax.jms.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/lib/javax.persistence.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/lib/javax.resource.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/lib/javax.servlet.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/lib/javax.servlet.jsp.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/lib/javax.servlet.jsp.jstl.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/lib/javax.transaction.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/src/ClientThread.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/src/EmailClient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/src/EmailContent/Email.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/src/EmailContent/Header.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/src/EmailServer.java" beforeDir="false" />
+    <list default="true" id="ad4868cf-efad-428e-9512-98975bedc83a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Project/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/.idea/libraries/Java_EE_6_Java_EE_6.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/IN2011_Email.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/lib/javax.annotation.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/lib/javax.ejb.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/lib/javax.jms.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/lib/javax.persistence.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/lib/javax.resource.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/lib/javax.servlet.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/lib/javax.servlet.jsp.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/lib/javax.servlet.jsp.jstl.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/lib/javax.transaction.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/src/ClientThread.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/src/EmailClient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/src/EmailContent/Email.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/src/EmailContent/Header.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/src/EmailServer.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="GithubDefaultAccount">
     <option name="defaultAccountId" value="66e64ea4-c645-4eb8-9619-e6f8915b41c4" />
@@ -73,8 +53,7 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2Tfut1eZzPpLt5KnHzKiBKKkNv8" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectId" id="2TTt9UCIfNZaGtdoup77CwXmKXe" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -83,15 +62,28 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.toDoOptions" />
   </component>
-  <component name="RunManager">
-    <configuration name="EmailServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Server.EmailServer" />
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\anton\IdeaProjects\IN2011_Email\src\Server" />
+      <recent name="C:\Users\anton\IdeaProjects\IN2011_Email\src\Client" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\anton\IdeaProjects\IN2011_Email\src\Client" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.EmailClient">
+    <configuration name="EmailClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Client.EmailClient" />
       <module name="IN2011_Email" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="Server.*" />
+          <option name="PATTERN" value="Client.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -99,39 +91,64 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="EmailRead" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Client.EmailRead" />
+      <module name="IN2011_Email" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EmailServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Server.EmailServer" />
+      <module name="IN2011_Email" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.EmailClient" />
         <item itemvalue="Application.EmailServer" />
+        <item itemvalue="Application.EmailRead" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="9e658a6a-2a96-4ccd-a186-a3e89ec86439" name="Changes" comment="" />
-      <created>1691446666860</created>
+      <changelist id="ad4868cf-efad-428e-9512-98975bedc83a" name="Changes" comment="" />
+      <created>1691078748658</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1691446666860</updated>
-      <workItem from="1691446668104" duration="96000" />
-      <workItem from="1691446779525" duration="38000" />
-      <workItem from="1691446856905" duration="446000" />
-      <workItem from="1691485763700" duration="301000" />
+      <updated>1691078748658</updated>
+      <workItem from="1691078750030" duration="6136000" />
+      <workItem from="1691150836433" duration="7570000" />
+      <workItem from="1691259439337" duration="5191000" />
+      <workItem from="1691406927424" duration="22141000" />
+      <workItem from="1691446450608" duration="12000" />
+      <workItem from="1691446511016" duration="50000" />
+      <workItem from="1691446573083" duration="92000" />
+      <workItem from="1691446767681" duration="6000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.net.SocketException" package="java.net" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
