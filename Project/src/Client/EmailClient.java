@@ -1,118 +1,167 @@
 package Client;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Objects;
 
 public class EmailClient {
-    private Socket SMTPsocket;
-    private Socket IMAPsocket;
-
     private JTable emailTable;
+    private DefaultTableModel tableModel;
+    private TableRowSorter<DefaultTableModel> sorter;
+
     private JButton writeButton;
     private JButton logOutButton;
     private JPanel clientPanel;
     private JButton refreshButton;
 
-    public EmailClient(String host, int SMTPport, int IMAPport, String address) throws IOException {
+    Socket SMTPsocket;
+    Socket IMAPsocket;
+
+    public EmailClient(Main main, String host, int SMTPport, int IMAPport, String address) throws IOException {
         SMTPsocket = new Socket(host, SMTPport);
         IMAPsocket = new Socket(host, IMAPport);
 
-        writeButton.addActionListener(e -> openNewPage("write", address));
-
-        logOutButton.addActionListener(e -> {
-            //TODO log out
-        });
-
+        //start writing email
+        writeButton.addActionListener(e -> openEmailWrite(address));
+        //read email
         ListSelectionModel selectionModelEmail = emailTable.getSelectionModel();
         selectionModelEmail.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         selectionModelEmail.addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting()) {
                 //opens message
-                openNewPage("read", address);
+                openEmailRead();
             }
         });
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //TODO receive emails
+        //refresh inbox
+        refreshButton.addActionListener(e -> {
+            //NOTE unchecked code
+            //get all emails
+            tableModel = (DefaultTableModel)emailTable.getModel();
+            String[] emails;
+            try {
+                emails = receiveEmails();
+                //resets table if it is being redrawn
+                tableModel.setColumnCount(0);
+                tableModel.setRowCount(0);
+
+                //set columns
+                tableModel.addColumn("FROM");
+                tableModel.addColumn("SUBJECT");
+                tableModel.addColumn("KEYWORDS");
+
+                //insert rows
+                for(String i : emails){
+                    String[] elements = i.split("\r\n");
+                    tableModel.insertRow(0, new Object[]{
+                            elements[1],
+                            elements[2],
+                            elements[3]});
+                }
+
+                sorter = new TableRowSorter<>(tableModel);
+                emailTable.setRowSorter(sorter);
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
+        });
+        //log out
+        logOutButton.addActionListener(e -> {
+            try {
+                close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            main.goToLoginPage();
         });
     }
 
     //open pages read or write
-    public void openNewPage(String page, String address) {
-        JFrame newPage = null;
+    public void openEmailWrite(String address) {
+        JFrame newPage = new EmailWrite(address);
+        newPage.setVisible(true);
+    }
 
-        switch (page) {
-            case "write" -> newPage = new EmailWrite(address);
-            case "read" -> {
-                if (emailTable.getSelectedRow() != -1) {
-                    int selectedRow = emailTable.getSelectedRow();
-                    TableModel tableModel = emailTable.getModel();
+    public void openEmailRead() {
+        JFrame newPage;
 
-                    newPage = new EmailRead(tableModel.getValueAt(selectedRow, 1).toString(),
-                            tableModel.getValueAt(selectedRow, 2).toString(),
-                            tableModel.getValueAt(selectedRow, 3).toString(),
-                            tableModel.getValueAt(selectedRow, 4).toString());
-                }
-            }
-            default -> {
-                // Default case if 'page' doesn't match any known page
-                System.out.println("Invalid page name.");
-                return;
-            }
-        }
-        if (newPage != null) {
+        if (emailTable.getSelectedRow() != -1) {
+            int selectedRow = emailTable.getSelectedRow();
+            TableModel tableModel = emailTable.getModel();
+
+            newPage = new EmailRead(tableModel.getValueAt(selectedRow, 1).toString(),
+                    tableModel.getValueAt(selectedRow, 2).toString(),
+                    tableModel.getValueAt(selectedRow, 3).toString(),
+                    tableModel.getValueAt(selectedRow, 4).toString());
             newPage.setVisible(true);
         }
     }
 
-    public void sendEmail(int MessageID, String from, String to, String subject, String body) throws IOException {
+    public void sendSMTP(String text) throws IOException {
         try (OutputStream os = SMTPsocket.getOutputStream()) {
-            os.write(("id" + MessageID + from + "\n" + to + "\n" + subject + "\n" + body).getBytes());
+            os.write((text).getBytes());
         }
     }
 
-    public String receiveEmail() throws IOException {
-        //FIXME receiving emails does not work
+    public void sendIMAP(String text) throws IOException {
         try (OutputStream os = IMAPsocket.getOutputStream()) {
-            os.write(("").getBytes());
+            os.write((text).getBytes());
         }
-        /*try (InputStream is = socket.getInputStream()) {
+    }
+
+    //NOTE unchecked read methods
+    public String readSMTP() throws IOException {
+        if (IMAPsocket.isClosed()) {
+            throw new IOException("Socket is closed");
+        }
+
+        try (InputStream is = SMTPsocket.getInputStream()) {
             byte[] buffer = new byte[1024];
-            System.out.println("2");
-            int bytesRead = is.read(buffer);
-            return new String(buffer, 0, bytesRead);
-        }*/
-        return("read");
+            int bytesRead;
+            StringBuilder response = new StringBuilder();
+            while ((bytesRead = is.read(buffer)) != -1) {
+                response.append(new String(buffer, 0, bytesRead));
+            }
+            return response.toString();
+        }
+    }
+
+    public String readIMAP() throws IOException {
+        if (IMAPsocket.isClosed()) {
+            throw new IOException("Socket is closed");
+        }
+
+        try (InputStream is = IMAPsocket.getInputStream()) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            StringBuilder response = new StringBuilder();
+            while ((bytesRead = is.read(buffer)) != -1) {
+                response.append(new String(buffer, 0, bytesRead));
+            }
+            return response.toString();
+        }
+    }
+
+    public String[] receiveEmails() throws IOException {
+        //TODO receive emails
+        return(null);
     }
 
     public void close() throws IOException {
+        sendSMTP("QUIT");
+        sendIMAP("QUIT");
         SMTPsocket.close();
+        IMAPsocket.close();
     }
     //getters, setters
     public JPanel getPanel() {
         return clientPanel;
     }
-
-
-    /*public static void main(String[] args) throws IOException {
-        //send an email
-        String host = "localhost";
-        int port = 8080;
-        EmailClient client = new EmailClient(host, port, "from@example.com");
-        //TODO set up ID system
-        client.sendEmail(0,"from@example.com", "to@example.com", "Subject", "This is the body of the email.");
-
-        //receive an email
-        String email = client.receiveEmail();
-        System.out.println(email);
-
-        client.close();
-    }*/
 }

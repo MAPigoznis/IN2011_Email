@@ -2,6 +2,8 @@ package Client;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 public class Main {
@@ -29,6 +31,14 @@ public class Main {
         frame.setVisible(true);
 
         goToLoginPage();
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                //TODO close all sockets
+            }
+        });
+
     }
 
     public void goToLoginPage(){
@@ -47,9 +57,7 @@ public class Main {
         frame.setVisible(true);
     }
 
-    public void goToEmailClient(String host, int SMTPport, int IMAPport, String address) throws IOException {
-        //create panels
-        EmailClient client = new EmailClient(host, SMTPport, IMAPport, address);;
+    public void goToEmailClient(EmailClient client) {
         Component clientPanel = client.getPanel();
 
         //remove previous cards
