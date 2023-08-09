@@ -42,10 +42,11 @@ public class SMTPServer {
                 String line;
                 while ((line = readLine(in)) != null) {
                     if (line.equals("QUIT")) {
+                        System.out.println("Quit!!!");
                         break;
                     }
-
-                    System.out.println("<< ["+line+"]");
+                    if(line!=null && !line.equals(""))
+                        System.out.println("<< ["+line+"]");
                 }
             } catch (IOException e) {
                 e.printStackTrace();

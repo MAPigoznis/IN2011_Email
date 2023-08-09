@@ -36,6 +36,7 @@ public void sendMail() throws IOException{
         send("This is the body of the email.");
         send(".");
         send("QUIT");
+        System.out.println("all sent");
         close();
 }
 
