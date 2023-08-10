@@ -60,15 +60,15 @@ public class SMTPClientThread extends Thread {
                         writer.write("Connection closed.");
                         break;
                     }
-
-                    System.out.println("Client says: " + msg);
+                    if (msg!=null)
+                        System.out.println("Client says1: " + msg);
                     if (!email.isEmpty()) {
                         System.out.println("Client sent: " + email);
                     }
                     System.out.println(Arrays.toString(tokens));
                 }
-
-                System.out.println("Client says: " + msg);
+                    if(msg!=null)
+                System.out.println("Client says2: " + msg);
             }
         } catch (IOException e) {
             e.printStackTrace();

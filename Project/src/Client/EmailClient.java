@@ -104,6 +104,12 @@ public class EmailClient {
         }
     }
 
+     public Socket getIMAPsocket(){
+        return IMAPsocket;
+     }
+    public Socket getSMTPsocket(){
+        return SMTPsocket;
+    }
     public void sendSMTP(String text) throws IOException {
         try (OutputStream os = SMTPsocket.getOutputStream()) {
             os.write((text).getBytes());

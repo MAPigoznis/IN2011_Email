@@ -8,6 +8,8 @@ import java.util.Objects;
 public class IMAPClientThread extends Thread{
     private Socket clientSocket;
     private EmailStorage storage;
+    private BufferedReader reader;
+    private PrintWriter writer;
 
     public IMAPClientThread(Socket clientSocket, EmailStorage storage) {
         this.clientSocket = clientSocket;
@@ -15,38 +17,36 @@ public class IMAPClientThread extends Thread{
     }
 
     @Override
-    public void run() {
+    public void run(){
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            Writer writer = new OutputStreamWriter(clientSocket.getOutputStream());
+            reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            writer = new PrintWriter(clientSocket.getOutputStream(), true);
 
             String msg;
-            while (true) {
-                //if user sends command split into tokens
-                msg = reader.readLine();
-                if (msg != null) {
+            while ((msg = reader.readLine()) != null) {
+                System.out.println("IMAP Server Received: " + msg);
                     String[] tokens = msg.split(" ");
 
                     if (Objects.equals(tokens[0], "LOGIN")) {
                         //client requests credential check
-                        writer.write("OK LOGIN Completed");
+                        System.out.println("sending ACK ");
+                        writer.println("OK LOGIN Completed");
                     } else if (Objects.equals(tokens[0], "SELECT")) {
                         //client requests inbox
                         if (Objects.equals(tokens[1], "INBOX")) {
                             sendEmailsToClient(clientSocket);
-                            writer.write("OK INBOX SELECTED");
+                            writer.println("OK INBOX SELECTED");
                         } else {
-                            writer.write("NO INBOX not selected");
+                            writer.println("NO INBOX not selected");
                         }
                     } else if (msg.startsWith("QUIT")) {
                         //quit thread
-                        writer.write("Connection closed");
+                        writer.println("Connection closed");
                         break;
                     }
 
-                    System.out.println("Client IMAP: " + msg);
+
                 }
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
