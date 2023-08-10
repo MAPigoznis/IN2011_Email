@@ -1,10 +1,6 @@
 package Server;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +19,7 @@ public class SMTPClientThread extends Thread {
     public void run() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            Writer writer = new OutputStreamWriter(clientSocket.getOutputStream());
+            PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
 
             String msg;
             List<String> email = new ArrayList<>();
@@ -35,15 +31,15 @@ public class SMTPClientThread extends Thread {
 
                     if (Objects.equals(tokens[0], "HALO")) {
                         //client connected
-                        writer.write("250 Hello " + tokens[1]);
+                        writer.println("Hello " + tokens[1]);
                     } else if (Objects.equals(tokens[0], "MAIL")){
                         //from
                         email.add(tokens[1]);
-                        writer.write("250 OK");
+                        writer.println("OK MAIL");
                     } else if (Objects.equals(tokens[0], "RCPT")){
                         //to
                         email.add(tokens[1]);
-                        writer.write("250 OK");
+                        writer.println("OK RCPT");
                     } else if (Objects.equals(tokens[0], "DATA")){
                         //email text
                         String body = null;
@@ -54,21 +50,18 @@ public class SMTPClientThread extends Thread {
                             email.add(body);
                         }
                         email.add(tokens[1]);
-                        writer.write("250 OK");
+                        writer.println("OK DATA");
+                        //TODO add email to email storage for user, empty email
                     } else if (msg.startsWith("QUIT")){
                         //quit thread
-                        writer.write("Connection closed.");
+                        writer.println("SMTP connection closed.");
                         break;
                     }
-                    if (msg!=null)
-                        System.out.println("Client says1: " + msg);
                     if (!email.isEmpty()) {
-                        System.out.println("Client sent: " + email);
+                        System.out.println("SMTP Server Received: " + msg);
                     }
                     System.out.println(Arrays.toString(tokens));
                 }
-                    if(msg!=null)
-                System.out.println("Client says2: " + msg);
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -2,8 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ad4868cf-efad-428e-9512-98975bedc83a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Server/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Server/UserStorage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../out/production/IN2011_Email/Server/User.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../out/production/IN2011_Email/Server/UserStorage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/ClientLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/ClientLogin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/EmailClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/EmailClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/EmailWrite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/EmailWrite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/IMAPClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/IMAPClientThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/SMTPClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/SMTPClientThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/IN2011_Email/Client/ClientLogin$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../out/production/IN2011_Email/Client/ClientLogin$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/IN2011_Email/Client/ClientLogin.class" beforeDir="false" afterPath="$PROJECT_DIR$/../out/production/IN2011_Email/Client/ClientLogin.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/IN2011_Email/Client/EmailClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/../out/production/IN2011_Email/Client/EmailClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/IN2011_Email/Client/EmailWrite$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../out/production/IN2011_Email/Client/EmailWrite$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/IN2011_Email/Client/EmailWrite.class" beforeDir="false" afterPath="$PROJECT_DIR$/../out/production/IN2011_Email/Client/EmailWrite.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/IN2011_Email/Server/IMAPClientThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/../out/production/IN2011_Email/Server/IMAPClientThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/IN2011_Email/Server/SMTPClientThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/../out/production/IN2011_Email/Server/SMTPClientThread.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,6 +133,7 @@
       <workItem from="1691446767681" duration="6000" />
       <workItem from="1691487494684" duration="80000" />
       <workItem from="1691487637669" duration="4000" />
+      <workItem from="1691697132695" duration="177000" />
     </task>
     <servers />
   </component>

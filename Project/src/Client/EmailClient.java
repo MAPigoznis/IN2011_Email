@@ -6,9 +6,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.Objects;
 
@@ -16,6 +14,7 @@ public class EmailClient {
     private JTable emailTable;
     private DefaultTableModel tableModel;
     private TableRowSorter<DefaultTableModel> sorter;
+    private String address;
 
     private JButton writeButton;
     private JButton logOutButton;
@@ -24,25 +23,36 @@ public class EmailClient {
 
     Socket SMTPsocket;
     Socket IMAPsocket;
+    BufferedReader SMTPreader;
+    PrintWriter SMTPwriter;
+    BufferedReader IMAPreader;
+    PrintWriter IMAPwriter;
 
     public EmailClient(Main main, String host, int SMTPport, int IMAPport, String address) throws IOException {
         SMTPsocket = new Socket(host, SMTPport);
         IMAPsocket = new Socket(host, IMAPport);
 
+        SMTPreader = new BufferedReader(new InputStreamReader(getSMTPsocket().getInputStream()));
+        SMTPwriter = new PrintWriter(getSMTPsocket().getOutputStream(), true);
+        IMAPreader = new BufferedReader(new InputStreamReader(getIMAPsocket().getInputStream()));
+        IMAPwriter = new PrintWriter(getIMAPsocket().getOutputStream(), true);
+
+        this.address = address;
+
         //start writing email
-        writeButton.addActionListener(e -> openEmailWrite(address));
+        writeButton.addActionListener(e -> openEmailWrite( this));
         //read email
         ListSelectionModel selectionModelEmail = emailTable.getSelectionModel();
         selectionModelEmail.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         selectionModelEmail.addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting()) {
                 //opens message
-                openEmailRead();
+                openEmailRead(this);
             }
         });
         //refresh inbox
         refreshButton.addActionListener(e -> {
-            //NOTE unchecked code
+            //FIXME unchecked code
             //get all emails
             tableModel = (DefaultTableModel)emailTable.getModel();
             String[] emails;
@@ -58,8 +68,9 @@ public class EmailClient {
                 tableModel.addColumn("KEYWORDS");
 
                 //insert rows
+                String[] elements;
                 for(String i : emails){
-                    String[] elements = i.split("\r\n");
+                    elements = i.split("\r\n");
                     tableModel.insertRow(0, new Object[]{
                             elements[1],
                             elements[2],
@@ -84,12 +95,12 @@ public class EmailClient {
     }
 
     //open pages read or write
-    public void openEmailWrite(String address) {
-        JFrame newPage = new EmailWrite(address);
+    public void openEmailWrite(EmailClient client) {
+        JFrame newPage = new EmailWrite(client);
         newPage.setVisible(true);
     }
 
-    public void openEmailRead() {
+    public void openEmailRead(EmailClient client) {
         JFrame newPage;
 
         if (emailTable.getSelectedRow() != -1) {
@@ -104,57 +115,6 @@ public class EmailClient {
         }
     }
 
-     public Socket getIMAPsocket(){
-        return IMAPsocket;
-     }
-    public Socket getSMTPsocket(){
-        return SMTPsocket;
-    }
-    public void sendSMTP(String text) throws IOException {
-        try (OutputStream os = SMTPsocket.getOutputStream()) {
-            os.write((text).getBytes());
-        }
-    }
-
-    public void sendIMAP(String text) throws IOException {
-        try (OutputStream os = IMAPsocket.getOutputStream()) {
-            os.write((text).getBytes());
-        }
-    }
-
-    //NOTE unchecked read methods
-    public String readSMTP() throws IOException {
-        if (IMAPsocket.isClosed()) {
-            throw new IOException("Socket is closed");
-        }
-
-        try (InputStream is = SMTPsocket.getInputStream()) {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            StringBuilder response = new StringBuilder();
-            while ((bytesRead = is.read(buffer)) != -1) {
-                response.append(new String(buffer, 0, bytesRead));
-            }
-            return response.toString();
-        }
-    }
-
-    public String readIMAP() throws IOException {
-        if (IMAPsocket.isClosed()) {
-            throw new IOException("Socket is closed");
-        }
-
-        try (InputStream is = IMAPsocket.getInputStream()) {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            StringBuilder response = new StringBuilder();
-            while ((bytesRead = is.read(buffer)) != -1) {
-                response.append(new String(buffer, 0, bytesRead));
-            }
-            return response.toString();
-        }
-    }
-
     public String[] receiveEmails() throws IOException {
         //TODO receive emails
         return(null);
@@ -166,8 +126,36 @@ public class EmailClient {
         SMTPsocket.close();
         IMAPsocket.close();
     }
+
+    //thread socket controls
+    public void sendSMTP(String text) throws IOException {
+        SMTPwriter.println(text);
+    }
+    public void sendIMAP(String text) throws IOException {
+        IMAPwriter.println(text);
+    }
+    public String readSMTP() throws IOException {
+        String resp = SMTPreader.readLine();
+        System.out.println("SMTP: " + resp);
+        return resp;
+    }
+    public String readIMAP() throws IOException {
+        String resp = IMAPreader.readLine();
+        System.out.println("IMAP: " + resp);
+        return resp;
+    }
+
     //getters, setters
     public JPanel getPanel() {
         return clientPanel;
+    }
+    public Socket getIMAPsocket(){
+        return IMAPsocket;
+    }
+    public Socket getSMTPsocket(){
+        return SMTPsocket;
+    }
+    public String getAddress(){
+        return address;
     }
 }

@@ -8,8 +8,6 @@ import java.util.Objects;
 public class IMAPClientThread extends Thread{
     private Socket clientSocket;
     private EmailStorage storage;
-    private BufferedReader reader;
-    private PrintWriter writer;
 
     public IMAPClientThread(Socket clientSocket, EmailStorage storage) {
         this.clientSocket = clientSocket;
@@ -19,18 +17,21 @@ public class IMAPClientThread extends Thread{
     @Override
     public void run(){
         try {
-            reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            writer = new PrintWriter(clientSocket.getOutputStream(), true);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
 
             String msg;
             while ((msg = reader.readLine()) != null) {
                 System.out.println("IMAP Server Received: " + msg);
                     String[] tokens = msg.split(" ");
 
-                    if (Objects.equals(tokens[0], "LOGIN")) {
-                        //client requests credential check
-                        System.out.println("sending ACK ");
-                        writer.println("OK LOGIN Completed");
+                    if (Objects.equals(tokens[0], "LOGIN") && tokens.length == 3) {
+                        //check if user is stored
+                        if (checkCredentials(tokens[1], tokens[2])) {
+                            writer.println("OK LOGIN Complete");
+                        }  else {
+                            writer.println("ERROR Incorrect Credentials");
+                        }
                     } else if (Objects.equals(tokens[0], "SELECT")) {
                         //client requests inbox
                         if (Objects.equals(tokens[1], "INBOX")) {
@@ -41,15 +42,26 @@ public class IMAPClientThread extends Thread{
                         }
                     } else if (msg.startsWith("QUIT")) {
                         //quit thread
-                        writer.println("Connection closed");
+                        writer.println("IMAP connection closed");
                         break;
                     }
-
-
                 }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Boolean checkCredentials(String email, String password) {
+        //get the list of users from the user storage
+        List<User> users = UserStorage.getUsers();
+
+        //check if the email and password exist in the list of users
+        for (User user : users) {
+            if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void sendEmailsToClient(Socket socket) throws IOException {
@@ -58,11 +70,11 @@ public class IMAPClientThread extends Thread{
 
         // Send the list of emails to the client
         for (List<String> email : emails) {
-            String message = "";
+            StringBuilder message = new StringBuilder();
             for (String line : email) {
-                message += line + "\r\n";
+                message.append(line).append("\r\n");
             }
-            socket.getOutputStream().write(message.getBytes());
+            socket.getOutputStream().write(message.toString().getBytes());
         }
     }
 }

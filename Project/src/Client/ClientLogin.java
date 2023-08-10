@@ -3,11 +3,7 @@ package Client;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.Objects;
 
 public class ClientLogin {
     private JTextField textField;
@@ -20,23 +16,23 @@ public class ClientLogin {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    EmailClient client = new EmailClient(main,"localhost", 8080, 8081, textField.getText());
-
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(client.getIMAPsocket().getInputStream()));
-                    PrintWriter writer = new PrintWriter(client.getIMAPsocket().getOutputStream(), true);
-
-                    String user = textField.getText();
+                    String address = textField.getText();
                     String password = passwordField.getText();
 
-                    writer.println("LOGIN " + user + " " + password);
+                    EmailClient client = new EmailClient(main,"localhost", 8080, 8081, address);
 
-                    //FIXME read calls cause a socket closed error
-                    var resp = reader.readLine();
-                    System.out.println("client received login response "+resp);
-                    //if (client.readIMAP(), "OK LOGIN Complete")) {
+                    //if server approves login open client screen else error
+                    client.sendIMAP("LOGIN " + address + " " + password);
+                    String resp = client.readIMAP();
+
+                    if (resp.startsWith("OK")) {
                         main.goToEmailClient(client);
-                        System.out.println("client going to mailFrame");
-                    //}
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "Error: Incorrect credentials.",
+                                "Authentication Failed",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
