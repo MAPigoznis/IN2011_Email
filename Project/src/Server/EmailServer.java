@@ -5,14 +5,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class EmailServer {
-    private ServerSocket SMTPport;
-    private ServerSocket IMAPport;
+    private ServerSocket smtpServerSocket;
+    private ServerSocket imapServerSocket;
     private boolean isRunning;
     private EmailStorage storage;
 
-    public EmailServer(int SMTPport, int IMAPport) throws IOException {
-        this.SMTPport = new ServerSocket(SMTPport);
-        this.IMAPport = new ServerSocket(IMAPport);
+    public EmailServer(int smtpPort, int imapPort) throws IOException {
+        this.smtpServerSocket = new ServerSocket(smtpPort);
+        this.imapServerSocket = new ServerSocket(imapPort);
         isRunning = true;
 
         storage = new EmailStorage();
@@ -20,14 +20,14 @@ public class EmailServer {
     }
 
     public void startSMTP() {
-        System.out.println("Server started. Listening SMTP on port " + SMTPport.getLocalPort());
+        System.out.println("SMTP Server started. Listening SMTP on port " + smtpServerSocket.getLocalPort());
         while (isRunning) {
             try {
-                Socket SMTPclientSocket = SMTPport.accept();
+                Socket smtpSocket = smtpServerSocket.accept();
                 System.out.println("Client SMTP connected!");
 
                 //create new client thread
-                SMTPClientThread SMTPclientThread = new SMTPClientThread(SMTPclientSocket, storage);
+                SMTPClientThread SMTPclientThread = new SMTPClientThread(smtpSocket, storage);
                 SMTPclientThread.start();
 
             } catch (IOException e) {
@@ -39,15 +39,15 @@ public class EmailServer {
     }
 
     public void startIMAP() {
-        System.out.println("Listening IMAP on port " + IMAPport.getLocalPort());
+        System.out.println("Listening IMAP on port " + imapServerSocket.getLocalPort());
         while (isRunning) {
             try {
-                Socket IMAPclientSocket = IMAPport.accept();
+                Socket imapSocket = imapServerSocket.accept();
                 System.out.println("Client IMAP connected!");
 
                 //create new client thread
-                IMAPClientThread IMAPclientThread = new IMAPClientThread(IMAPclientSocket, storage);
-                IMAPclientThread.start();
+                IMAPClientThread imapClientThread = new IMAPClientThread(imapSocket, storage);
+                imapClientThread.start();
 
             } catch (IOException e) {
                 if (isRunning) {
@@ -59,9 +59,10 @@ public class EmailServer {
 
     public void stop() {
         try {
+            System.out.println("Both IMAP./SMTP Server stopped.");
             isRunning = false;
-            SMTPport.close();
-            IMAPport.close();
+            smtpServerSocket.close();
+            imapServerSocket.close();
             System.out.println("Server stopped.");
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,10 +70,10 @@ public class EmailServer {
     }
 
     public static void main(String[] args) {
-        int SMTPport = 25;
-        int IMAPport = 143;
+        int smtpPort = 25;
+        int imapPort = 143;
         try {
-            EmailServer server = new EmailServer(SMTPport, IMAPport);
+            EmailServer server = new EmailServer(smtpPort, imapPort);
 
             // Set up SMTP server thread
             Thread SMTPThread = new Thread(server::startSMTP);
