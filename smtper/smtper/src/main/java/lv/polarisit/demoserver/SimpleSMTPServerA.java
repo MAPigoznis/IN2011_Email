@@ -2,23 +2,32 @@ package lv.polarisit.demoserver;
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
+import java.util.concurrent.*;
 
-public class SimpleSMTPServer {
+public class SimpleSMTPServerA {
 
     private static final int PORT = 25;
 
+    private final ExecutorService threadPool = Executors.newFixedThreadPool(10);
+    private final Map<String, List<Mail>> mailStore = new HashMap<>();
+
     public static void main(String[] args) throws IOException {
+        SimpleSMTPServerA server = new SimpleSMTPServerA();
+        server.start();
+    }
+
+    private void start() throws IOException {
         ServerSocket serverSocket = new ServerSocket(PORT);
-        System.out.println("Simple SMTP Server listening on port " + PORT);
+        System.out.println("SMTP Server listening on port " + PORT);
         while (true) {
             Socket socket = serverSocket.accept();
             System.out.println("New client connected");
-            Thread thread = new Thread(new SMTPHandler(socket));
-            thread.start();
+            threadPool.submit(new SMTPHandler(socket));
         }
     }
 
-    private static class SMTPHandler implements Runnable {
+    private class SMTPHandler implements Runnable {
 
         private Socket socket;
         private BufferedReader reader;
@@ -36,21 +45,21 @@ public class SimpleSMTPServer {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     System.out.println("Received: " + line);
-                    if (line.startsWith("LOGIN")) {
-                        writer.println("OK");
-                    }else if (line.equals("HELO")) {
+                    if (line.equals("HELO")) {
                         writer.println("250 Hello");
                     } else if (line.startsWith("MAIL FROM:")) {
                         String sender = line.substring(10).trim();
+                        addMail(sender);
                         writer.println("250 Sender OK");
                     } else if (line.startsWith("RCPT TO:")) {
                         String recipient = line.substring(7).trim();
+                        addMail(recipient);
                         writer.println("250 Recipient OK");
                     } else if (line.equals("DATA")) {
                         writer.println("354 Start mail input; end with <CRLF>.<CRLF>");
                         String message = reader.readLine();
                         while (!message.equals(".")) {
-                            System.out.println("Received message: " + message);
+                            addMail(message);
                             message = reader.readLine();
                         }
                         writer.println("250 OK");
@@ -63,8 +72,25 @@ public class SimpleSMTPServer {
                     }
                 }
             } catch (IOException e) {
-                System.out.println("Error: " + e.getMessage());
+                System.out.println("CLOSINNG SOCKET!Error: " + e.getMessage());
+            } finally {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                }
             }
+        }
+
+        private void addMail(String address) throws IOException{
+            Mail mail = new Mail();
+            mail.setAddress(address);
+            mail.setBody(reader.readLine());
+            List<Mail> mails = mailStore.get(address);
+            if (mails == null) {
+                mails = new ArrayList<>();
+                mailStore.put(address, mails);
+            }
+            mails.add(mail);
         }
     }
 }
