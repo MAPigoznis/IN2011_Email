@@ -56,6 +56,8 @@ public class SMTPClientThread extends Thread {
                         //quit thread
                         writer.println("SMTP connection closed.");
                         break;
+                    } else{
+                        writer.println("UNKNOWN Input.");
                     }
                     if (!email.isEmpty()) {
                         System.out.println("SMTP Server Received: " + msg);

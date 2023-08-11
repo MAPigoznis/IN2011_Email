@@ -69,8 +69,8 @@ public class EmailServer {
     }
 
     public static void main(String[] args) {
-        int SMTPport = 8080;
-        int IMAPport = 8081;
+        int SMTPport = 25;
+        int IMAPport = 143;
         try {
             EmailServer server = new EmailServer(SMTPport, IMAPport);
 

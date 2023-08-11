@@ -23,13 +23,15 @@ public class IMAPClientThread extends Thread{
             String msg;
             while ((msg = reader.readLine()) != null) {
                 System.out.println("IMAP Server Received: " + msg);
-                    String[] tokens = msg.split(" ");
+                    String[] tokens = msg.split("\\s+");
 
-                    if (Objects.equals(tokens[0], "LOGIN") && tokens.length == 3) {
+                    if (msg.startsWith("LOGIN")) {
                         //check if user is stored
-                        if (checkCredentials(tokens[1], tokens[2])) {
+                        if (tokens.length == 3 && checkCredentials(tokens[1], tokens[2])) {
+                            System.out.println("<<OK LOGIN");
                             writer.println("OK LOGIN Complete");
                         }  else {
+                            System.out.println("<<ERR LOGIN");
                             writer.println("ERROR Incorrect Credentials");
                         }
                     } else if (Objects.equals(tokens[0], "SELECT")) {
@@ -44,6 +46,8 @@ public class IMAPClientThread extends Thread{
                         //quit thread
                         writer.println("IMAP connection closed");
                         break;
+                    } else {
+                        writer.println("500 Syntax error");
                     }
                 }
         } catch (IOException e) {

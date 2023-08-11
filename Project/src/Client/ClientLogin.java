@@ -19,7 +19,7 @@ public class ClientLogin {
                     String address = textField.getText();
                     String password = passwordField.getText();
 
-                    EmailClient client = new EmailClient(main,"localhost", 8080, 25, address);
+                    EmailClient client = new EmailClient(main,"localhost", 25, 143, address);
 
                     //if server approves login open client screen else error
                     client.sendIMAP("LOGIN " + address + " " + password);

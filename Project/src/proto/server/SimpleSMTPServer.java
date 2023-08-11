@@ -12,13 +12,31 @@ public class SimpleSMTPServer {
     private static final int PORT = 25;
 
     public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(PORT);
-        System.out.println("Simple SMTP Server listening on port " + PORT);
-        while (true) {
-            Socket socket = serverSocket.accept();
-            System.out.println("New client connected");
-            Thread thread = new Thread(new SMTPHandler(socket));
-            thread.start();
+        Runnable task1 = () -> {
+            launchThread("SMTP", 25);
+        };
+        Runnable task2 = () -> {
+            launchThread("IMAP", 143);
+        };
+        Thread thread1 = new Thread(task1);
+        Thread thread2 = new Thread(task2);
+
+        thread1.start();
+        thread2.start();
+    }
+
+    private static void launchThread(String serverType, int port) {
+        try {
+            ServerSocket serverSocket = new ServerSocket(port);
+            System.out.println("Simple "+serverType+" Server listening on port " + port);
+            while (true) {
+                Socket socket = serverSocket.accept();
+                System.out.println("New client connected");
+                Thread thread = new Thread(new SMTPHandler(socket));
+                thread.start();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 

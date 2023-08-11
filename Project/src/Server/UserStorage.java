@@ -11,7 +11,7 @@ public class UserStorage {
         users.add(new User("johndoe@gmail.com", "password123"));
         users.add(new User("janedoe@yahoo.com", "password456"));
         users.add(new User("admin@example.com", "password789"));
-        users.add(new User("user", "pass"));
+        users.add(new User("a", "a"));
     }
 
     public static List<User> getUsers() {

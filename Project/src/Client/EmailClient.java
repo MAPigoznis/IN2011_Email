@@ -29,11 +29,13 @@ public class EmailClient {
     PrintWriter IMAPwriter;
 
     public EmailClient(Main main, String host, int SMTPport, int IMAPport, String address) throws IOException {
+        System.out.println("host:imap/smtp"+host+":"+IMAPport+"/"+SMTPport);
         SMTPsocket = new Socket(host, SMTPport);
         IMAPsocket = new Socket(host, IMAPport);
 
         SMTPreader = new BufferedReader(new InputStreamReader(getSMTPsocket().getInputStream()));
         SMTPwriter = new PrintWriter(getSMTPsocket().getOutputStream(), true);
+
         IMAPreader = new BufferedReader(new InputStreamReader(getIMAPsocket().getInputStream()));
         IMAPwriter = new PrintWriter(getIMAPsocket().getOutputStream(), true);
 
@@ -131,19 +133,19 @@ public class EmailClient {
 
     //thread socket controls
     public void sendSMTP(String text) throws IOException {
-        IMAPwriter.println(text); // fixme: -> SMTPwriter
+        SMTPwriter.println(text);
     }
     public void sendIMAP(String text) throws IOException {
         IMAPwriter.println(text);
     }
     public String readSMTP() throws IOException {
-        String resp = IMAPreader.readLine(); // fixme -> SMTPreader
+        String resp = SMTPreader.readLine();
         System.out.println("SMTP<<: " + resp);
         return resp;
     }
     public String readIMAP() throws IOException {
         String resp = IMAPreader.readLine();
-        System.out.println("IMAP: " + resp);
+        System.out.println("IMAP<<: " + resp);
         return resp;
     }
 

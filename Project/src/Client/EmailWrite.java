@@ -43,18 +43,18 @@ public class EmailWrite extends JFrame {
                             + "\n BODY: " + textField.getText());
 
                     // fixme: wrap this!
-                    client.sendIMAP("MAIL FROM: aaaaa");
-                    client.readIMAP();
+                    client.sendSMTP("MAIL FROM: aaaaa");
+                    client.readSMTP();
 
-                    client.sendIMAP("RCPT TO: "+recipientField.getText());
-                    client.readIMAP();
+                    client.sendSMTP("RCPT TO: "+recipientField.getText());
+                    client.readSMTP();
 
-                    client.sendIMAP("DATA");
-                    client.readIMAP();
+                    client.sendSMTP("DATA");
+                    client.readSMTP();
 
-                    client.sendIMAP(textField.getText());
-                    client.sendIMAP(".");
-                    client.readIMAP();
+                    client.sendSMTP(textField.getText());
+                    client.sendSMTP(".");
+                    client.readSMTP();
 
                     dispose();
                 } catch (Exception ex) {
