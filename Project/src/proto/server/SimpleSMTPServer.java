@@ -50,6 +50,7 @@ public class SimpleSMTPServer {
         private PrintWriter writer;
         private EmailStorage storage;
         private Map<String,List<Mail>> mailStore;
+        private Mail mail = new Mail();
 
         public SMTPHandler(Socket socket) throws IOException {
             this.socket = socket;
@@ -58,6 +59,7 @@ public class SimpleSMTPServer {
             this.storage = new EmailStorage();
             this.mailStore = new HashMap();
             this.mailStore.put("INBOX",new ArrayList<Mail>());
+            this.mail = new Mail();
         }
 
         @Override
@@ -73,9 +75,11 @@ public class SimpleSMTPServer {
                         writer.println("250 Hello");
                     } else if (line.startsWith("MAIL FROM:")) {
                         String sender = line.substring(10).trim();
+                        mail.setAddress(sender);
                         writer.println("250 Sender OK");
                     } else if (line.startsWith("RCPT TO:")) {
                         String recipient = line.substring(7).trim();
+                        mail.setAddress(recipient);
                         writer.println("250 Recipient OK");
                     } else if (line.equals("DATA")) {
                         writer.println("354 Start mail input; end with <CRLF>.<CRLF>");
@@ -84,6 +88,11 @@ public class SimpleSMTPServer {
                             System.out.println("Received message: " + message);
                             message = reader.readLine();
                         }
+                        this.mail.setBody(message);
+                        this.mail.setId(UUID.randomUUID().toString());
+                        List<Mail> mails = this.mailStore.get("INBOX");
+                        mails.add(this.mail);
+                        mailStore.put("INBOX", mails);
                         writer.println("250 OK");
                     } else if (line.equals("QUIT")) {
                         writer.println("221 Goodbye");

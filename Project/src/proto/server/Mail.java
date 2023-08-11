@@ -2,24 +2,24 @@ package proto.server;
 
 public class Mail {
 
-    private int id;
+    private String id;
     private String address;
     private String body;
 
     public Mail() {
     }
 
-    public Mail(int id, String address, String body) {
+    public Mail(String id, String address, String body) {
         this.id = id;
         this.address = address;
         this.body = body;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
