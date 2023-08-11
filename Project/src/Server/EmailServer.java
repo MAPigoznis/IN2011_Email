@@ -76,12 +76,12 @@ public class EmailServer {
             EmailServer server = new EmailServer(smtpPort, imapPort);
 
             // Set up SMTP server thread
-            Thread SMTPThread = new Thread(server::startSMTP);
-            SMTPThread.start();
+            Thread smtpThread = new Thread(server::startSMTP);
+            smtpThread.start();
 
             // Set up IMAP server thread
-            Thread IMAPThread = new Thread(server::startIMAP);
-            IMAPThread.start();
+            Thread imapThread = new Thread(server::startIMAP);
+            imapThread.start();
         } catch (IOException e) {
             e.printStackTrace();
         }

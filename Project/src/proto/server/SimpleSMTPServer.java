@@ -1,11 +1,14 @@
 package proto.server;
 
+import Server.EmailStorage;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.*;
 
 public class SimpleSMTPServer {
 
@@ -45,11 +48,15 @@ public class SimpleSMTPServer {
         private Socket socket;
         private BufferedReader reader;
         private PrintWriter writer;
+        private EmailStorage storage;
+        private Map<String,List<Mail>> mailStore;
 
         public SMTPHandler(Socket socket) throws IOException {
             this.socket = socket;
             this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.writer = new PrintWriter(socket.getOutputStream(), true);
+            this.storage = new EmailStorage();
+            this.mailStore = new HashMap();
         }
 
         @Override
@@ -57,6 +64,7 @@ public class SimpleSMTPServer {
             try {
                 String line;
                 while ((line = reader.readLine()) != null) {
+                    String[] tokens = line.split("\\s+");
                     System.out.println("Received: " + line);
                     if (line.startsWith("LOGIN")) {
                         writer.println("OK");
@@ -80,6 +88,25 @@ public class SimpleSMTPServer {
                         writer.println("221 Goodbye");
                         socket.close();
                         return;
+                    } else if (line.startsWith( "SELECT")) {
+                        //client requests inbox
+                        if (tokens[1].equals( "INBOX")) {
+                            sendEmailsToClient();
+                            writer.println("OK INBOX SELECTED");
+                        } else {
+                            writer.println("NO INBOX not selected");
+                        }
+                    } else if (line.startsWith("SELECT INBOX")) {
+                        writer.println("250 OK");
+                        List<Mail> mails = mailStore.get("INBOX");
+                        if (mails == null) {
+                            mails = new ArrayList<Mail>();
+                            mailStore.put("INBOX", mails);
+                        }
+                        writer.println("* 1 EXISTS");
+                        for (Mail mail : mails) {
+                            writer.println("* " + mail.getId() + " FETCH");
+                        }
                     } else {
                         writer.println("500 Syntax error");
                     }
@@ -88,5 +115,19 @@ public class SimpleSMTPServer {
                 System.out.println("Error: " + e.getMessage());
             }
         }
+        public void sendEmailsToClient() throws IOException {
+            // Get the list of all emails
+            List<List<String>> emails = storage.getAllEmails();
+
+            // Send the list of emails to the client
+            for (List<String> email : emails) {
+                StringBuilder message = new StringBuilder();
+                for (String line : email) {
+                    message.append(line).append("\r\n");
+                }
+                writer.println(message);
+            }
+        }
     }
+
 }
