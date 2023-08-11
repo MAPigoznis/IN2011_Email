@@ -88,14 +88,14 @@ public class SimpleSMTPServer {
                         writer.println("221 Goodbye");
                         socket.close();
                         return;
-                    } else if (line.startsWith( "SELECT")) {
-                        //client requests inbox
-                        if (tokens[1].equals( "INBOX")) {
-                            sendEmailsToClient();
-                            writer.println("OK INBOX SELECTED");
-                        } else {
-                            writer.println("NO INBOX not selected");
-                        }
+//                    } else if (line.startsWith( "SELECT")) {
+//                        //client requests inbox
+//                        if (tokens[1].equals( "INBOX")) {
+//                            sendEmailsToClient();
+//                            writer.println("OK INBOX SELECTED");
+//                        } else {
+//                            writer.println("NO INBOX not selected");
+//                        }
                     } else if (line.startsWith("SELECT INBOX")) {
                         writer.println("250 OK");
                         List<Mail> mails = mailStore.get("INBOX");
