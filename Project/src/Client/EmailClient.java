@@ -63,9 +63,9 @@ public class EmailClient {
         });
         //refresh inbox
         refreshButton.addActionListener(e -> {
-            //FIXME unchecked code
+            //FIXME refresh does not work
             //get all emails
-            tableModel = (DefaultTableModel)emailTable.getModel();
+            /*tableModel = (DefaultTableModel)emailTable.getModel();
             List<List<String>> emails;
             try {
                 emails = parseEmails(receiveEmails());
@@ -81,7 +81,7 @@ public class EmailClient {
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
-            }
+            }*/
         });
         //log out
         logOutButton.addActionListener(e -> {
@@ -132,8 +132,9 @@ public class EmailClient {
         }
         return null;
     }
-    public List<List<String>> parseEmails(String line) {
-        // Split the line into emails at the double pipes.
+    /*public List<List<String>> parseEmails(String line) {
+        //FIXME emails cannot be parsed correctly
+        //split the line into emails at the double pipes.
         List<String> emails = null;
         List<List<String>> mailList = new ArrayList<>();
 
@@ -163,7 +164,7 @@ public class EmailClient {
         }
 
         return mailList;
-    }
+    }*/
 
     public void close() throws IOException {
         sendSMTP("QUIT");

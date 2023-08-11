@@ -1,5 +1,8 @@
 package proto.server;
 
+import proto.server.User;
+import proto.server.UserStorage;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -67,6 +70,13 @@ public class SimpleSMTPServer {
                     System.out.println("Received: " + line);
                     if (line.startsWith("LOGIN")) {
                         //TODO authenticate
+                        if (tokens.length == 3 && checkCredentials(tokens[1], tokens[2])) {
+                            System.out.println("<<OK LOGIN");
+                            writer.println("OK LOGIN Complete");
+                        }  else {
+                            System.out.println("<<ERR LOGIN");
+                            writer.println("ERROR Incorrect Credentials");
+                        }
                         writer.println("OK");
                     }else if (line.equals("HELO")) {
                         writer.println("250 Hello");
@@ -127,6 +137,19 @@ public class SimpleSMTPServer {
                 return line;
             }
             //create a string that will represent the emails on one line
+        }
+
+        public Boolean checkCredentials(String email, String password) {
+            //get the list of users from the user storage
+            List<User> users = UserStorage.getUsers();
+
+            //check if the email and password exist in the list of users
+            for (User user : users) {
+                if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
