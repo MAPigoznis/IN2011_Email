@@ -39,6 +39,8 @@ public class EmailClient {
 
         this.address = address;
 
+
+
         //start writing email
         writeButton.addActionListener(e -> openEmailWrite( this));
         //read email
@@ -129,14 +131,14 @@ public class EmailClient {
 
     //thread socket controls
     public void sendSMTP(String text) throws IOException {
-        SMTPwriter.println(text);
+        IMAPwriter.println(text); // fixme: -> SMTPwriter
     }
     public void sendIMAP(String text) throws IOException {
         IMAPwriter.println(text);
     }
     public String readSMTP() throws IOException {
-        String resp = SMTPreader.readLine();
-        System.out.println("SMTP: " + resp);
+        String resp = IMAPreader.readLine(); // fixme -> SMTPreader
+        System.out.println("SMTP<<: " + resp);
         return resp;
     }
     public String readIMAP() throws IOException {
