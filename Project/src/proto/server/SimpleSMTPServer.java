@@ -57,6 +57,7 @@ public class SimpleSMTPServer {
             this.writer = new PrintWriter(socket.getOutputStream(), true);
             this.storage = new EmailStorage();
             this.mailStore = new HashMap();
+            this.mailStore.put("INBOX",new ArrayList<Mail>());
         }
 
         @Override
