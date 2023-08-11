@@ -71,6 +71,34 @@ public class Main {
         frame.setVisible(true);
     }
 
+    public void goToWriteEmail(EmailWrite write) {
+        Component clientPanel = write.getPanel();
+
+        //remove previous cards
+        cardPane.removeAll();
+
+        //create a new client page card
+        cardPane.add("client", clientPanel);
+        cardLayout.show(cardPane, "client");
+
+        frame.repaint();
+        frame.setVisible(true);
+    }
+
+    public void goToReadEmail(EmailRead read) {
+        Component clientPanel = read.getPanel();
+
+        //remove previous cards
+        cardPane.removeAll();
+
+        //create a new client page card
+        cardPane.add("client", clientPanel);
+        cardLayout.show(cardPane, "client");
+
+        frame.repaint();
+        frame.setVisible(true);
+    }
+
     public static void main(String[] args){
         new Main();
     }

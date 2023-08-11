@@ -1,35 +1,28 @@
 package Client;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
-public class EmailWrite extends JFrame {
+public class EmailWrite {
     private JTextField recipientField;
     private JTextField subjectField;
     private JButton sendButton;
     private JTextArea textField;
     private JPanel EmailWritePanel;
     private JLabel senderLabel;
+    private JButton backButton;
     private JLabel recipientLabel;
 
-    public EmailWrite(EmailClient client) {
-        //set up window
-        super("Write Email");
-        setLayout(new GridLayout(4, 2));
-        //setTitle("Write Email");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(300, 200);
-        setLocationRelativeTo(null); //center
+    private Main main;
+    private EmailClient client;
 
+    public EmailWrite(Main main, EmailClient client) {
+        this.main = main;
+        this.client = client;
 
-        senderLabel = new JLabel("sender");
-        recipientLabel = new JLabel("sender");
-        //senderLabel.setText(client.getAddress());
-        recipientField = new JTextField(20);
-        subjectField = new JTextField(20);
+        senderLabel.setText(client.getAddress());
+
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -42,42 +35,38 @@ public class EmailWrite extends JFrame {
                             + "\n SUBJ:" + subjectField.getText()
                             + "\n BODY: " + textField.getText());
 
-                    // fixme: wrap this!
-                    client.sendSMTP("MAIL FROM: aaaaa");
-                    client.readSMTP();
+                    //send email
+                    client.sendSMTP("MAIL FROM: "+senderLabel.getText());
+                    if (client.readSMTP().startsWith("250 Sender OK")) {
+                        client.sendSMTP("RCPT TO: "+recipientField.getText());
+                        if (client.readSMTP().startsWith("250 Recipient OK")) {
+                            client.sendSMTP("DATA");
+                            if (client.readSMTP().startsWith("250 OK")) {
+                                client.sendSMTP(textField.getText());
+                                client.sendSMTP(".");
+                            }
+                        }
+                    }
 
-                    client.sendSMTP("RCPT TO: "+recipientField.getText());
-                    client.readSMTP();
-
-                    client.sendSMTP("DATA");
-                    client.readSMTP();
-
-                    client.sendSMTP(textField.getText());
-                    client.sendSMTP(".");
-                    client.readSMTP();
-
-                    dispose();
+                    close();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
         });
-
-        add(new JLabel("TO:"));
-        add(recipientField);
-
-        add(new JLabel("subject:"));
-        add(subjectField);
-
-        add(new JLabel("body:"));
-        add(textField);
-
-        add(sendButton);
-        pack();
-        setVisible(true);
-
-
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                close();
+            }
+        });
+    }
+    private void close() {
+        main.goToEmailClient(client);
     }
 
+    public JPanel getPanel() {
+        return EmailWritePanel;
+    }
 }
 

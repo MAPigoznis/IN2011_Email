@@ -1,7 +1,5 @@
 package proto.server;
 
-import Server.EmailStorage;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -48,7 +46,6 @@ public class SimpleSMTPServer {
         private Socket socket;
         private BufferedReader reader;
         private PrintWriter writer;
-        private EmailStorage storage;
         private Map<String,List<Mail>> mailStore;
         private Mail mail = new Mail();
 
@@ -56,7 +53,6 @@ public class SimpleSMTPServer {
             this.socket = socket;
             this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.writer = new PrintWriter(socket.getOutputStream(), true);
-            this.storage = new EmailStorage();
             this.mailStore = new HashMap();
             this.mailStore.put("INBOX",new ArrayList<Mail>());
             this.mail = new Mail();
@@ -70,19 +66,20 @@ public class SimpleSMTPServer {
                     String[] tokens = line.split("\\s+");
                     System.out.println("Received: " + line);
                     if (line.startsWith("LOGIN")) {
+                        //TODO authenticate
                         writer.println("OK");
                     }else if (line.equals("HELO")) {
                         writer.println("250 Hello");
                     } else if (line.startsWith("MAIL FROM:")) {
                         String sender = line.substring(10).trim();
-                        mail.setAddress(sender);
+                        mail.setSender(sender);
                         writer.println("250 Sender OK");
                     } else if (line.startsWith("RCPT TO:")) {
                         String recipient = line.substring(7).trim();
-                        mail.setAddress(recipient);
+                        mail.setRecipient(recipient);
                         writer.println("250 Recipient OK");
-                    } else if (line.equals("DATA")) {
-                        writer.println("354 Start mail input; end with <CRLF>.<CRLF>");
+                    } else if (line.startsWith("DATA")) {
+                        writer.println("250 OK");
                         String message = reader.readLine();
                         while (!message.equals(".")) {
                             System.out.println("Received message: " + message);
@@ -98,14 +95,6 @@ public class SimpleSMTPServer {
                         writer.println("221 Goodbye");
                         socket.close();
                         return;
-//                    } else if (line.startsWith( "SELECT")) {
-//                        //client requests inbox
-//                        if (tokens[1].equals( "INBOX")) {
-//                            sendEmailsToClient();
-//                            writer.println("OK INBOX SELECTED");
-//                        } else {
-//                            writer.println("NO INBOX not selected");
-//                        }
                     } else if (line.startsWith("SELECT INBOX")) {
                         writer.println("250 OK");
                         List<Mail> mails = mailStore.get("INBOX");
@@ -114,9 +103,7 @@ public class SimpleSMTPServer {
                             mailStore.put("INBOX", mails);
                         }
                         writer.println("* 1 EXISTS");
-                        for (Mail mail : mails) {
-                            writer.println("* " + mail.getId() + " FETCH");
-                        }
+                        writer.println(sendEmails());
                     } else {
                         writer.println("500 Syntax error");
                     }
@@ -125,18 +112,21 @@ public class SimpleSMTPServer {
                 System.out.println("Error: " + e.getMessage());
             }
         }
-        public void sendEmailsToClient() throws IOException {
-            // Get the list of all emails
-            List<List<String>> emails = storage.getAllEmails();
 
-            // Send the list of emails to the client
-            for (List<String> email : emails) {
-                StringBuilder message = new StringBuilder();
-                for (String line : email) {
-                    message.append(line).append("\r\n");
+        public String sendEmails() throws IOException {
+            //get the list of emails from the mail store
+            List<Mail> emails = mailStore.get("user@example.com");
+            if (emails == null) {
+                return null;
+            } else {
+                String line = "";
+                for (Mail email : emails) {
+                    line += email.generateEmail();
                 }
-                writer.println(message);
+                System.out.println("emails are: " + line);
+                return line;
             }
+            //create a string that will represent the emails on one line
         }
     }
 

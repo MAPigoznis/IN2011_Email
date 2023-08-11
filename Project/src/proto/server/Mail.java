@@ -3,38 +3,52 @@ package proto.server;
 public class Mail {
 
     private String id;
-    private String address;
+    private String sender;
+    private String recipient;
+    private String subject;
     private String body;
 
     public Mail() {
     }
 
-    public Mail(String id, String address, String body) {
+    public Mail(String id, String sender, String recipient, String subject, String body) {
         this.id = id;
-        this.address = address;
+        this.sender = sender;
+        this.recipient = recipient;
+        this.subject = subject;
         this.body = body;
+    }
+
+    public String generateEmail() {
+        String line = "";
+        line += id + "|" + sender + "|" + recipient + "|" + subject + "|" + body + "||";
+        return line;
     }
 
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getAddress() {
-        return address;
+    public String getRecipient() {
+        return recipient;
+    }
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public String getSender() {
+        return sender;
+    }
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
     public String getBody() {
         return body;
     }
-
     public void setBody(String body) {
         this.body = body;
     }

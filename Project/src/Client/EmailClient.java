@@ -8,6 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class EmailClient {
@@ -21,6 +24,8 @@ public class EmailClient {
     private JPanel clientPanel;
     private JButton refreshButton;
 
+    private Main main;
+
     Socket SMTPsocket;
     Socket IMAPsocket;
     BufferedReader SMTPreader;
@@ -29,6 +34,8 @@ public class EmailClient {
     PrintWriter IMAPwriter;
 
     public EmailClient(Main main, String host, int SMTPport, int IMAPport, String address) throws IOException {
+        this.main = main;
+
         System.out.println("host:imap/smtp"+host+":"+IMAPport+"/"+SMTPport);
         SMTPsocket = new Socket(host, SMTPport);
         IMAPsocket = new Socket(host, IMAPport);
@@ -44,7 +51,7 @@ public class EmailClient {
 
 
         //start writing email
-        writeButton.addActionListener(e -> openEmailWrite( this));
+
         //read email
         ListSelectionModel selectionModelEmail = emailTable.getSelectionModel();
         selectionModelEmail.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -59,30 +66,19 @@ public class EmailClient {
             //FIXME unchecked code
             //get all emails
             tableModel = (DefaultTableModel)emailTable.getModel();
-            String[] emails;
+            List<List<String>> emails;
             try {
-                emails = receiveEmails();
+                emails = parseEmails(receiveEmails());
                 //resets table if it is being redrawn
-                tableModel.setColumnCount(0);
-                tableModel.setRowCount(0);
+                for (List<String> email : emails) {
+                    // Get the sender, subject, and body of the email.
+                    String sender = email.get(0);
+                    String subject = email.get(1);
+                    String body = email.get(2);
 
-                //set columns
-                tableModel.addColumn("FROM");
-                tableModel.addColumn("SUBJECT");
-                tableModel.addColumn("KEYWORDS");
-
-                //insert rows
-                String[] elements;
-                for(String i : emails){
-                    elements = i.split("\r\n");
-                    tableModel.insertRow(0, new Object[]{
-                            elements[1],
-                            elements[2],
-                            elements[3]});
+                    // Add a row to the table.
+                    tableModel.addRow(new Object[]{sender, subject, body});
                 }
-
-                sorter = new TableRowSorter<>(tableModel);
-                emailTable.setRowSorter(sorter);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -96,13 +92,20 @@ public class EmailClient {
             }
             main.goToLoginPage();
         });
+        writeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                goToWrite();
+            }
+        });
+    }
+
+    private void goToWrite() {
+        EmailWrite write = new EmailWrite(main, this);
+        main.goToWriteEmail(write);
     }
 
     //open pages read or write
-    public void openEmailWrite(EmailClient client) {
-        JFrame newPage = new EmailWrite(client);
-        newPage.setVisible(true);
-    }
 
     public void openEmailRead(EmailClient client) {
         JFrame newPage;
@@ -111,17 +114,55 @@ public class EmailClient {
             int selectedRow = emailTable.getSelectedRow();
             TableModel tableModel = emailTable.getModel();
 
-            newPage = new EmailRead(tableModel.getValueAt(selectedRow, 1).toString(),
-                    tableModel.getValueAt(selectedRow, 2).toString(),
-                    tableModel.getValueAt(selectedRow, 3).toString(),
-                    tableModel.getValueAt(selectedRow, 4).toString());
-            newPage.setVisible(true);
+            //tableModel.getValueAt(selectedRow, 1).toString(),
+            //        tableModel.getValueAt(selectedRow, 2).toString(),
+            //        tableModel.getValueAt(selectedRow, 3).toString(),
+            //        tableModel.getValueAt(selectedRow, 4).toString();
+            //newPage.setVisible(true);
         }
     }
 
-    public String[] receiveEmails() throws IOException {
+    public String receiveEmails() throws IOException {
         //TODO receive emails
-        return(null);
+        sendSMTP("SELECT INBOX");
+        if (readSMTP().startsWith("250 OK")) {
+            if (readSMTP().startsWith("* 1 EXISTS")) {
+                return readSMTP();
+            }
+        }
+        return null;
+    }
+    public List<List<String>> parseEmails(String line) {
+        // Split the line into emails at the double pipes.
+        List<String> emails = null;
+        List<List<String>> mailList = new ArrayList<>();
+
+        if (line != null) {
+            emails = Arrays.asList(line.split("\\|\\|"));
+            System.out.println(emails);
+
+            // Create a list of lists to store the emails.
+            if (emails.size() > 0 && emails.get(0) != null) {
+                for (String email : emails) {
+                    // Split the email into components.
+                    String[] components = email.split("\\|");
+
+                    // Add the components to the list.
+                    List<String> mail = new ArrayList<>();
+                    System.out.println();
+                    mail.add(components[0]);
+                    mail.add(components[1]);
+                    mail.add(components[2]);
+                    mail.add(components[3]);
+                    mail.add(components[4]);
+
+                    // Add the email to the list of lists.
+                    mailList.add(mail);
+                }
+            }
+        }
+
+        return mailList;
     }
 
     public void close() throws IOException {
